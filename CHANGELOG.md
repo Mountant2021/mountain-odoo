@@ -1,5 +1,9 @@
 # Changelog
 
+## v3.3 - 2022-01-05
+### Added
+- Add Viindoo utility
+
 ## v3.2 - 2022-12-27
 ### Added
 - Update Odoo version to 16.0.

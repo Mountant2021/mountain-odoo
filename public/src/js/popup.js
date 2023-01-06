@@ -1,6 +1,56 @@
 import { initTheme, toggleTheme } from './common.js';
 
-const COMPONENTS = [{
+const COMPONENTS = [ {
+    page: 'Mountain Coder',
+}, {
+    icon: 'github',
+    color: 'dark',
+    link: 'https://github.com/Mountant2021',
+    title: 'Github',
+    size: 6,
+}, {
+    icon: 'youtube',
+    color: 'red',
+    link: 'https://www.youtube.com/@MountainCoder',
+    title: 'Youtube',
+    size: 6,
+}, {
+    page: 'Viindoo',
+}, {
+    icon: 'globe',
+    color: 'primary',
+    link: 'https://viindoo.com/',
+    title: 'Viindoo',
+    size: 6,
+}, {
+    icon: 'robot',
+    color: 'green',
+    link: 'https://runbot.viindoo.com',
+    title: 'Runbot',
+    size: 6,
+}, {
+    icon: 'github',
+    color: 'dark',
+    title: 'Github',
+    size: 12,
+    shortcuts: [{
+        title: 'tvtmaaddons',
+        items: {
+            '16.0': 'https://github.com/Viindoo/tvtmaaddons/tree/16.0',
+            '15.0': 'https://github.com/Viindoo/tvtmaaddons/tree/15.0',
+            '14.0': 'https://github.com/Viindoo/tvtmaaddons/tree/14.0',
+        }
+    }, {
+        title: 'erponline-enterprise',
+        items: {
+            '16.0': 'https://github.com/Viindoo/erponline-enterprise/tree/16.0',
+            '15.0': 'https://github.com/Viindoo/erponline-enterprise/tree/15.0',
+            '14.0': 'https://github.com/Viindoo/erponline-enterprise/tree/14.0',
+        }
+    }],
+}, {
+    page: 'Odoo',
+}, {
     icon: 'globe',
     color: 'primary',
     link: 'https://odoo.com',
@@ -84,59 +134,73 @@ const COMPONENTS = [{
 
 let componentContent = '';
 COMPONENTS.forEach(component => {
-    let shortcutsContent = '';
-    let linkContent = '';
-    if (component.shortcuts) {
-        component.shortcuts.forEach(shortcut => {
-            if (shortcut.items) {
-                let items = '';
-                for (let option in shortcut.items) {
-                    items += `<li><a class="dropdown-item" target="_blank" href="${shortcut.items[option]}">${option}</a></li>`
-                }
-                shortcutsContent += `\
-                    <div class="btn-group" role="group">
+    if (component.page){
+        componentContent += `\
+            <div class="col-12 my-1">
+                <div class="ou-link border rounded position-relative bg-info">
+                    <div class="d-flex align-items-center p-2">
+                        <div class="flex-grow-1 ms-2">
+                            <h6 class="mb-0 text-uppercase fw-bolder text-white">${component.page}</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        let shortcutsContent = '';
+        let linkContent = '';
+        if (component.shortcuts) {
+            component.shortcuts.forEach(shortcut => {
+                if (shortcut.items) {
+                    let items = '';
+                    for (let option in shortcut.items) {
+                        items += `<li><a class="dropdown-item" target="_blank" href="${shortcut.items[option]}">${option}</a></li>`
+                    }
+                    shortcutsContent += `\
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-${component.color}-soft ms-2 btn-sm" href="${shortcut.link}" target="_blank">
+                                ${shortcut.title}
+                            </a>
+                            <div class="btn-group" role="group">
+                                <button class="btn btn-${component.color}-soft btn-sm dropdown-toggle" type="button" id="options" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="options">
+                                    ${items}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    shortcutsContent += `\
                         <a class="btn btn-${component.color}-soft ms-2 btn-sm" href="${shortcut.link}" target="_blank">
                             ${shortcut.title}
                         </a>
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-${component.color}-soft btn-sm dropdown-toggle" type="button" id="options" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-three-dots-vertical"></i>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="options">
-                                ${items}
-                            </ul>
+                    `;
+                }
+            });
+        } else {
+            linkContent = `<a class="link" href="${component.link}" target="_blank"></a>`;
+        }
+        componentContent += `\
+            <div class="col-${component.size || 6} my-1">
+                <div class="ou-link border rounded position-relative">
+                    ${linkContent}
+                    <div class="d-flex align-items-center p-2">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle ou-icon-container ou-bg-${component.color}">
+                                <i class="bi bi-${component.icon}"></i>
+                            </div>
                         </div>
-                    </div>
-                `;
-            } else {
-                shortcutsContent += `\
-                    <a class="btn btn-${component.color}-soft ms-2 btn-sm" href="${shortcut.link}" target="_blank">
-                        ${shortcut.title}
-                    </a>
-                `;
-            }
-        });
-    } else {
-        linkContent = `<a class="link" href="${component.link}" target="_blank"></a>`;
-    }
-    componentContent += `\
-        <div class="col-${component.size || 6} my-1">
-            <div class="ou-link border rounded position-relative">
-                ${linkContent}
-                <div class="d-flex align-items-center p-2">
-                    <div class="flex-shrink-0">
-                        <div class="rounded-circle ou-icon-container ou-bg-${component.color}">
-                            <i class="bi bi-${component.icon}"></i>
+                        <div class="flex-grow-1 ms-2">
+                            <h6 class="mb-0">${component.title}</h6>
                         </div>
+                        ${shortcutsContent}
                     </div>
-                    <div class="flex-grow-1 ms-2">
-                        <h6 class="mb-0">${component.title}</h6>
-                    </div>
-                    ${shortcutsContent}
                 </div>
             </div>
-        </div>
-    `;
+        `;
+    }
 });
 document.querySelector('.ou-link-container').innerHTML = componentContent;
 
