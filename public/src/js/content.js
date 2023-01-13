@@ -9,7 +9,7 @@ if (!BLACKLIST_DOMAIN.includes(window.location.hostname)) {
 
     window.addEventListener('message', event => {
         if (event.data && event.data.isOdooPage) {
-            chrome.runtime.sendMessage({method: 'getOptions'}, options => {
+            chrome.runtime.sendMessage({ method: 'getOptions' }, options => {
                 // Add login buttons
                 if (document.getElementsByClassName('oe_login_form') && document.querySelector('.field-login')) {
                     if (options.showLoginButtons) {
@@ -27,7 +27,7 @@ if (!BLACKLIST_DOMAIN.includes(window.location.hostname)) {
                         `;
                         const loginEl = document.querySelector('.field-login');
                         loginEl.insertAdjacentHTML('beforeBegin', BUTTONS_TEMPLATE);
-            
+
                         document.querySelector('.ou-login-buttons').addEventListener('click', event => {
                             event.preventDefault();
                             document.getElementById('login').value = event.target.dataset.username;
@@ -36,14 +36,24 @@ if (!BLACKLIST_DOMAIN.includes(window.location.hostname)) {
                         });
                     }
                 }
-    
+
                 // Add navigation button
                 if (options.showNavigationButton && !window.location.pathname.includes('/pos/')) {
                     let navigationMode = 'Backend';
                     if (window.location.pathname === '/web' && document.body.classList.contains('o_web_client')) {
                         navigationMode = 'Frontend';
                     }
-    
+
+                    let debugMode = 'Enable Debug';
+                    if (window.location.search.includes('debug=1')) {
+                        debugMode = 'Disable Debug';
+                    }
+
+                    let assetsDebugMode = 'Enable Assets Debug';
+                    if (window.location.search.includes('debug=assets')) {
+                        assetsDebugMode = 'Disable Assets Debug';
+                    }
+
                     const NAVIGATION_BUTTON_TEMPLATE = `\
                         <div class="ou-navigation-button ou-clickable-button">
                             Go to ${navigationMode}
@@ -55,11 +65,12 @@ if (!BLACKLIST_DOMAIN.includes(window.location.hostname)) {
                                 </svg>
                             </div>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/web/login">Login</a>
-                                <a class="dropdown-item" href="/shop">Shop</a>
-                                <a class="dropdown-item" href="/my/home">Portal</a>
+                                <a class="dropdown-item ou-debug"><i class="fa fa-gear"></i> ${debugMode}</a>
+                                <a class="dropdown-item ou-debug-assets"><i class="fa fa-gears"></i> ${assetsDebugMode}</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/web/database/selector">Database Manager</a>
+                                <a class="dropdown-item" href="/web/login"><i class="fa fa-share-square-o"></i> Login</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/web/database/manager"><i class="fa fa-database"></i> Database Manager</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item small ou-hide" href="#" style="font-size: 11px;">
                                     <div class="text-danger"><i class="fa fa-eye-slash"></i> Hide</div>
@@ -72,7 +83,7 @@ if (!BLACKLIST_DOMAIN.includes(window.location.hostname)) {
                     navigationEl.classList.add('ou-navigation-button-container');
                     navigationEl.innerHTML = NAVIGATION_BUTTON_TEMPLATE;
                     document.body.appendChild(navigationEl);
-    
+
                     navigationEl.querySelector('.ou-navigation-button').addEventListener('click', event => {
                         if (navigationMode === 'Backend') {
                             window.location.replace(`${window.location.origin}/web`);
@@ -81,9 +92,31 @@ if (!BLACKLIST_DOMAIN.includes(window.location.hostname)) {
                         }
                     });
 
+                    function updateUrlDebug(debugOption) {
+                        const tabUrl = new URL(window.location);
+                        const params = new URLSearchParams(tabUrl.search);
+                        if (window.location.search.includes(`debug=${debugOption}`)) {
+                            debugOption = '0';
+                        }
+                        if (params.has('debug')) {
+                            params.delete('debug');
+                        }
+                        params.set('debug', debugOption);
+                        const url = tabUrl.origin + tabUrl.pathname + `?${params.toString()}` + tabUrl.hash;
+                        window.location.replace(url);
+                    }
+
+                    navigationEl.querySelector('.ou-debug').addEventListener('click', event => {
+                        updateUrlDebug('1');
+                    });
+
+                    navigationEl.querySelector('.ou-debug-assets').addEventListener('click', event => {
+                        updateUrlDebug('assets');
+                    });
+
                     navigationEl.querySelector('.ou-hide').addEventListener('click', event => {
                         event.preventDefault();
-                        chrome.runtime.sendMessage({method: 'disableNavigationButton'}, () => {
+                        chrome.runtime.sendMessage({ method: 'disableNavigationButton' }, () => {
                             navigationEl.remove();
                         });
                     });
