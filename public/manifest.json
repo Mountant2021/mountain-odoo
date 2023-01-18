@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Mountain Utility",
-    "version": "3.2",
+    "name": "Mountain Odoo",
+    "version": "0.1.0",
     "description": "Simple shortcuts and tools to save time",
     "action": {
         "default_popup": "popup.html",
@@ -17,7 +17,7 @@
         "48": "/src/images/icon48.png",
         "128": "/src/images/icon128.png"
     },
-    "author": "Droggol Infotech Private Limited, Mountain Coder",
+    "author": "Mountain Coder, Droggol Infotech Private Limited",
     "background": {
         "service_worker": "/src/js/background.js"
     },

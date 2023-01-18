@@ -65,12 +65,12 @@ if (!BLACKLIST_DOMAIN.includes(window.location.hostname)) {
                                 </svg>
                             </div>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item ou-debug"><i class="fa fa-gear"></i> ${debugMode}</a>
-                                <a class="dropdown-item ou-debug-assets"><i class="fa fa-gears"></i> ${assetsDebugMode}</a>
+                                <a class="dropdown-item ou-debug"><i class="fa fa-gear text-danger"></i> ${debugMode}</a>
+                                <a class="dropdown-item ou-debug-assets"><i class="fa fa-gears text-danger"></i> ${assetsDebugMode}</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/web/login"><i class="fa fa-share-square-o"></i> Login</a>
+                                <a class="dropdown-item" href="/web/login"><i class="fa fa-share-square-o text-success"></i> Login</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="/web/database/manager"><i class="fa fa-database"></i> Database Manager</a>
+                                <a class="dropdown-item" href="/web/database/manager"><i class="fa fa-database text-primary"></i> Database Manager</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item small ou-hide" href="#" style="font-size: 11px;">
                                     <div class="text-danger"><i class="fa fa-eye-slash"></i> Hide</div>
